@@ -1,6 +1,6 @@
 # Geometria do quadrado: Git, GitHub e contribuição com IA
 
-Uma aula básica, conduzida por este README, para acompanhar duas contribuições ao mesmo projeto: uma manual e outra com auxílio de IA.
+Notas de aula para aprender Git e GitHub construindo duas contribuições ao mesmo projeto: uma manual e outra com auxílio de inteligência artificial. O conteúdo segue a ordem de execução: entender o projeto, registrar uma issue, desenvolver, propor a alteração, revisar e integrar.
 
 O programa recebe o lado de um quadrado e devolve suas medidas em um dicionário. Vamos acrescentar uma medida por vez, usando **fork, branch, commit e pull request**.
 
@@ -10,20 +10,55 @@ O programa recebe o lado de um quadrado e devolve suas medidas em um dicionário
 | Primeiro PR, manual | Área e perímetro | `area = 25`, `perimetro = 20` |
 | Segundo PR, com IA | Área, perímetro e diagonal | `area = 25`, `perimetro = 20`, `diagonal ≈ 7,071` |
 
-**Estado inicial entregue:** `quadrado_geom.py` calcula somente a área. O código do perímetro neste README é uma instrução para a primeira contribuição. A diagonal e os testes serão preparados na etapa com IA.
+**Ponto de partida:** `quadrado_geom.py` calcula somente a área. Ao longo da aula, a primeira contribuição acrescenta o perímetro; a segunda acrescenta diagonal, validação e testes. Os exemplos deste README apresentam cada evolução no momento em que ela será implementada.
 
-## Quem faz o quê
+## Os papéis na colaboração
 
-| Pessoa | Papel | Repositório em que trabalha |
+| Participante | Responsabilidade | Repositório em que trabalha |
 |---|---|---|
-| **Ricardo** | Apresenta o projeto, explica o pedido, revisa e integra as contribuições | Original: [ricardocorsini/geometria-quadrado](https://github.com/ricardocorsini/geometria-quadrado) |
-| **Amigo** | Faz o fork, prepara as alterações e abre os PRs | Fork: `SEU-USUARIO/geometria-quadrado` |
+| **Mantenedor (Ricardo)** | Organiza os pedidos, revisa as propostas e integra as contribuições | Original: [ricardocorsini/geometria-quadrado](https://github.com/ricardocorsini/geometria-quadrado) |
+| **Contribuidor** | Desenvolve a alteração em seu fork e propõe sua integração por meio de um PR | Fork: `SEU-USUARIO/geometria-quadrado` |
 
-Os comandos de cada pessoa devem ser executados **na cópia dela e no computador dela**. Antes de copiar um endereço, substitua `SEU-USUARIO` pelo usuário real do amigo.
+O mantenedor e o contribuidor trabalham em cópias separadas. Execute os comandos de cada papel **na cópia correspondente e no computador de quem desempenha esse papel**. Antes de copiar um endereço, substitua `SEU-USUARIO` pelo usuário real do contribuidor.
 
-## 1. Preparação antes da aula
+## 1. Git, GitHub e os conceitos da colaboração
 
-Tenham uma conta no GitHub, Git 2.28+ e Python 3.10+ instalados, além de um editor de texto. O VS Code é uma opção. Este exemplo usa apenas a biblioteca padrão do Python.
+O Git registra a evolução dos arquivos no computador. O GitHub hospeda esse histórico e permite organizar pedidos e revisar propostas. É possível usar Git sem GitHub; nesta aula, usamos os dois para colaborar.
+
+Uma contribuição atravessa três lugares: o repositório original, o fork no GitHub e a cópia local do contribuidor. A branch separa a tarefa dentro do histórico dessa cópia. Os termos abaixo descrevem cada parte desse processo.
+
+| Termo | Significado nesta aula |
+|---|---|
+| **Git** | Sistema que registra versões dos arquivos e relaciona o histórico de alterações. Funciona localmente. |
+| **GitHub** | Plataforma que hospeda repositórios Git e reúne issues, PRs e revisões. |
+| **Repositório** | Conjunto de arquivos do projeto, histórico e referências de versões. |
+| **Original** | Repositório do projeto que receberá a proposta de contribuição. |
+| **Fork** | Cópia vinculada ao original no GitHub, normalmente na conta de quem contribui. |
+| **Clone** | Cópia de trabalho do repositório no computador ou no ambiente da IA, com o histórico Git. |
+| **Branch** | Linha de trabalho no histórico. Nesta aula, cada contribuição terá sua própria branch. |
+| **Branch padrão/base** | A padrão é a principal configurada no GitHub. A base é o destino escolhido para o PR; nesta aula, ambas são `master`. |
+| **Área de trabalho** | Arquivos que estão no disco e podem ser editados. Salvar o arquivo ainda não cria um commit. |
+| **Staging/index** | Seleção do conteúdo que entrará no próximo commit, preparada com `git add`. |
+| **Commit** | Registro de uma versão dos arquivos, com identificação, autoria e mensagem. Não envia nada ao GitHub sozinho. |
+| **Remote** | Destino configurado no Git para buscar ou enviar histórico. O nome e o endereço aparecem em `git remote -v`. |
+| **origin** | Nome convencional do remoto criado no clone. Para o contribuidor, apontará ao fork; para Ricardo, ao original. |
+| **upstream** | Nome convencional que o contribuidor dará ao original para buscar as atualizações do projeto. |
+| **fetch** | Busca histórico e atualiza referências remotas locais, sem integrar as alterações à branch atual. |
+| **pull** | Busca e integra alterações na branch atual. Usaremos `--ff-only` para recusar integração com histórico divergente. |
+| **push** | Envia commits e solicita a atualização da branch no remoto de destino. Não abre PR automaticamente. |
+| **Diff** | Comparação entre versões, mostrando o que foi acrescentado, removido ou alterado. |
+| **Issue** | Página que registra um pedido, problema ou investigação, com contexto, conversa e critérios de aceite. |
+| **Pull request/PR** | Proposta para integrar alterações de uma branch em outra, com espaço para revisar e conversar. |
+| **Review** | Revisão da proposta: pode gerar comentários, pedidos de ajuste ou aprovação. |
+| **Merge** | Integração das alterações ao destino aceito pelo mantenedor. |
+| **Checks/CI** | Verificações automáticas configuradas no projeto. Só aparecem quando existe essa configuração; rodar um teste local não cria CI. |
+| **Conflito** | Situação em que a integração exige decidir como combinar alterações concorrentes. |
+
+> **Três ações diferentes:** commit registra; push envia; PR propõe a integração. Nesta colaboração, o contribuidor propõe e o mantenedor decide o merge.
+
+## 2. Preparar o ambiente
+
+Cada participante precisa de uma conta no GitHub, Git 2.28+ e Python 3.10+ instalados, além de um editor de texto. O VS Code é uma opção. Este exemplo usa apenas a biblioteca padrão do Python.
 
 **Ambos, no terminal:**
 
@@ -32,11 +67,11 @@ git --version
 python --version
 ```
 
-Neste roteiro usamos `python`. Se o computador usa `python3` ou `py -3`, substitua o comando nos exemplos. Os comandos de Git podem ser usados no terminal do Linux/macOS ou no Git Bash do Windows.
+Nesta aula usamos `python`. Se o computador usa `python3` ou `py -3`, substitua o comando nos exemplos. Os comandos de Git podem ser usados no terminal do Linux/macOS ou no Git Bash do Windows.
 
 ### Autenticação para enviar commits
 
-Estar conectado ao GitHub no navegador e estar autenticado no terminal são coisas diferentes. Confiram o acesso antes da transmissão.
+Estar conectado ao GitHub no navegador e estar autenticado no terminal são coisas diferentes. A autenticação precisa estar concluída antes de enviar alterações.
 
 <details>
 <summary>Uma opção para autenticar o terminal: GitHub CLI</summary>
@@ -51,11 +86,13 @@ gh auth status
 
 No login, escolha `GitHub.com`, protocolo `HTTPS` e autenticação pelo navegador. Quem já usa outro método de autenticação Git pode mantê-lo. A identidade dos commits será configurada dentro de cada clone nas próximas etapas.
 
-Não compartilhe senha ou token na conversa com a IA nem durante a transmissão. Consulte a [instalação do GitHub CLI](https://cli.github.com/) se precisar dessa ferramenta.
+Senhas e tokens não devem ser compartilhados com a IA ou exibidos na tela. Consulte a [instalação do GitHub CLI](https://cli.github.com/) se precisar dessa ferramenta.
 
 </details>
 
-### Ricardo: abrir a cópia do original
+## 3. Conhecer e executar o programa inicial
+
+### A cópia local do mantenedor
 
 Em uma pasta de trabalho fora de outro repositório:
 
@@ -75,61 +112,6 @@ Lado: 5.0
 ```
 
 Neste repositório, a branch padrão é **`master`**. Em outros projetos, confira o nome; ele pode ser `main` ou outro. Na cópia de Ricardo, `origin` aponta para o original.
-
-### Ricardo: apresentar as duas tarefas
-
-Na aba **Issues** do original, use **New issue** para registrar os pedidos. Se já existirem issues equivalentes, reutilize-as. Copie os números/links realmente criados; os números de issues e PRs compartilham a mesma sequência no GitHub.
-
-**Pedido 1 — Adicionar o perímetro do quadrado**
-
-- Preservar o cálculo da área.
-- Acrescentar a chave `perimetro` ao dicionário retornado.
-- Usar a relação `perimetro = 4 * lado`.
-- Para lado `5.0`, obter área `25.0` e perímetro `20.0`.
-- Manter a execução de exemplo funcionando.
-
-**Pedido 2 — Adicionar diagonal, validação e testes**
-
-- Partir da versão que já contém área e perímetro.
-- Acrescentar `diagonal = lado * sqrt(2)` usando a biblioteca padrão.
-- Definir o lado como positivo e lançar `ValueError` para zero e valores negativos.
-- Criar testes com `unittest` para as três medidas e para entradas inválidas.
-- Manter o tipo de retorno como dicionário e preservar a execução de exemplo.
-
-## 2. Conceitos principais
-
-Esta tabela serve de consulta durante a explicação. Não é necessário decorar os termos antes da prática.
-
-| Termo | Significado nesta aula |
-|---|---|
-| **Git** | Sistema que registra versões dos arquivos e relaciona o histórico de alterações. Funciona localmente. |
-| **GitHub** | Plataforma que hospeda repositórios Git e reúne issues, PRs e revisões. |
-| **Repositório** | Conjunto de arquivos do projeto, histórico e referências de versões. |
-| **Original** | Repositório do projeto que receberá a proposta de contribuição. |
-| **Fork** | Cópia vinculada ao original no GitHub, normalmente na conta de quem contribui. |
-| **Clone** | Cópia de trabalho do repositório no computador ou no ambiente da IA, com o histórico Git. |
-| **Branch** | Linha de trabalho no histórico. Nesta aula, cada contribuição terá sua própria branch. |
-| **Branch padrão/base** | A padrão é a principal configurada no GitHub. A base é o destino escolhido para o PR; nesta aula, ambas são `master`. |
-| **Área de trabalho** | Arquivos que estão no disco e podem ser editados. Salvar o arquivo ainda não cria um commit. |
-| **Staging/index** | Seleção do conteúdo que entrará no próximo commit, preparada com `git add`. |
-| **Commit** | Registro de uma versão dos arquivos, com identificação, autoria e mensagem. Não envia nada ao GitHub sozinho. |
-| **Remote** | Destino configurado no Git para buscar ou enviar histórico. O nome e o endereço aparecem em `git remote -v`. |
-| **origin** | Nome convencional do remoto criado no clone. Para o amigo, apontará ao fork; para Ricardo, ao original. |
-| **upstream** | Nome convencional que o amigo dará ao original para buscar as atualizações do projeto. |
-| **fetch** | Busca histórico e atualiza referências remotas locais, sem integrar as alterações à branch atual. |
-| **pull** | Busca e integra alterações na branch atual. Usaremos `--ff-only` para recusar integração com histórico divergente. |
-| **push** | Envia commits e solicita a atualização da branch no remoto de destino. Não abre PR automaticamente. |
-| **Diff** | Comparação entre versões, mostrando o que foi acrescentado, removido ou alterado. |
-| **Issue** | Página que registra um pedido, problema ou investigação, com contexto, conversa e critérios de aceite. |
-| **Pull request/PR** | Proposta para integrar alterações de uma branch em outra, com espaço para revisar e conversar. |
-| **Review** | Revisão da proposta: pode gerar comentários, pedidos de ajuste ou aprovação. |
-| **Merge** | Integração das alterações ao destino aceito pelo mantenedor. |
-| **Checks/CI** | Verificações automáticas configuradas no projeto. Só aparecem quando existe essa configuração; rodar um teste local não cria CI. |
-| **Conflito** | Situação em que a integração exige decidir como combinar alterações concorrentes. |
-
-> **Três ações diferentes:** commit registra; push envia; PR propõe a integração. Na nossa demonstração, o amigo propõe e Ricardo decide o merge.
-
-## 3. Entender o programa inicial
 
 O arquivo `quadrado_geom.py` começa assim:
 
@@ -151,18 +133,73 @@ if __name__ == "__main__":
 - O bloco `if __name__ == "__main__":` executa o exemplo quando o arquivo é iniciado diretamente. Importar a função nos testes não executará esse exemplo.
 - A área usa unidades ao quadrado; perímetro e diagonal usam a mesma unidade do lado.
 
-## 4. Amigo: primeira contribuição, sem IA
+## 4. Registrar a primeira issue: o pedido de contribuição
 
-### 4.1. Criar o fork no navegador
+Antes de alterar o código, registre o que precisa ser feito. Uma **issue** concentra o objetivo, o contexto e os **critérios de aceite**: condições observáveis que permitem decidir se o pedido foi atendido.
+
+A issue descreve o trabalho; o pull request apresenta a implementação. Separar essas duas coisas permite discutir a necessidade antes de escrever código e relacionar o resultado ao pedido original.
+
+**Mantenedor, no GitHub:** abra [Issues do repositório original](https://github.com/ricardocorsini/geometria-quadrado/issues), clique em **New issue** e copie o título e a descrição abaixo. Se aparecer uma seleção de modelos, escolha a opção de issue em branco. Reutilize uma issue equivalente se ela já existir.
+
+**Título da issue:**
+
+```text
+Adicionar o cálculo do perímetro do quadrado
+```
+
+**Descrição da issue:**
+
+~~~markdown
+## Contexto
+
+A função quadrado_geom, no arquivo quadrado_geom.py, recebe o lado de
+um quadrado e atualmente retorna um dicionário contendo somente a área.
+
+## Objetivo
+
+Acrescentar o perímetro ao resultado da função, preservando o cálculo
+da área e o bloco de execução de exemplo.
+
+## Comportamento esperado
+
+Usar a relação: perimetro = 4 * lado.
+
+Para lado = 5.0, o resultado deve ser:
+{"area": 25.0, "perimetro": 20.0}
+
+## Critérios de aceite
+
+- [ ] A função continua retornando um dicionário.
+- [ ] A chave area mantém o cálculo lado ** 2.
+- [ ] A chave perimetro retorna 4 * lado.
+- [ ] Para lado 5.0, área e perímetro são 25.0 e 20.0.
+- [ ] A execução de python quadrado_geom.py continua funcionando.
+- [ ] A contribuição altera somente quadrado_geom.py.
+
+## Escopo
+
+A diagonal, a validação do lado e os testes automatizados serão tratados
+em uma segunda issue, depois da integração desta contribuição.
+~~~
+
+Clique em **Create / Submit new issue** para publicar. Guarde o **link e o número efetivamente criado**. Issues e PRs compartilham a mesma sequência numérica no GitHub; por isso, os exemplos usam marcadores em vez de supor que esta será a issue #1.
+
+O contribuidor lê o pedido e pode comentar que começará a tarefa, evitando trabalho duplicado. Labels classificam o pedido, e assignees identificam responsáveis quando usados pelo projeto; esses recursos não são necessários para completar o exemplo.
+
+## 5. Primeira contribuição: implementar o perímetro sem IA
+
+**Papel ativo: contribuidor.** A issue define a alteração que será feita. O fork permite publicar essa alteração na sua conta, e a branch mantém a tarefa identificada até a revisão.
+
+### 5.1. Criar o fork no navegador
 
 1. Abra o [repositório original](https://github.com/ricardocorsini/geometria-quadrado).
 2. Clique em **Fork** e confira o **Owner**: deve ser sua conta.
 3. Clique em **Create fork**. Se a cópia já existir, abra seu fork.
 4. Confira que o endereço agora é `github.com/SEU-USUARIO/geometria-quadrado` e que a página informa o vínculo com o original.
 
-### 4.2. Clonar o fork e identificar os destinos
+### 5.2. Clonar o fork e identificar os destinos
 
-**Amigo, no terminal, em uma pasta nova:**
+**Contribuidor, no terminal, em uma pasta nova:**
 
 ```bash
 git clone https://github.com/SEU-USUARIO/geometria-quadrado.git
@@ -183,7 +220,7 @@ git config user.email "SEU_EMAIL_DO_GITHUB"
 
 Essas configurações são locais a este repositório e não substituem o login necessário para o push.
 
-### 4.3. Atualizar a base e criar a branch da tarefa
+### 5.3. Atualizar a base e criar a branch da tarefa
 
 Comece com os arquivos salvos e `git status --short` sem alterações. Se houver trabalho pendente de outra tarefa, organize-o antes de continuar.
 
@@ -199,7 +236,7 @@ python quadrado_geom.py
 
 A branch atual deve ser `feat/perimetro`. A execução ainda mostra somente a área. Uma branch organiza o histórico; ela não guarda automaticamente edições ainda não commitadas.
 
-### 4.4. Acrescentar o perímetro no editor
+### 5.4. Acrescentar o perímetro no editor
 
 Altere **somente a função** em `quadrado_geom.py`, preservando o bloco de execução:
 
@@ -228,7 +265,9 @@ Lado: 5.0
 {'area': 25.0, 'perimetro': 20.0}
 ```
 
-### 4.5. Registrar e enviar ao fork
+### 5.5. Registrar e enviar ao fork
+
+Salvar o arquivo muda a área de trabalho. `git add` seleciona o conteúdo para o próximo commit, e `git diff --cached` permite revisar essa seleção. Depois, `git commit` registra a versão e `git push` a envia ao fork. Execute os comandos nessa ordem:
 
 ```bash
 git add quadrado_geom.py
@@ -240,7 +279,7 @@ git push -u origin feat/perimetro
 
 Antes do commit, o diff staged deve conter apenas a alteração intencional. O `-u` configura o rastreamento dessa branch. Abra seu fork no GitHub e selecione `feat/perimetro` para conferir o commit publicado.
 
-### 4.6. Abrir o primeiro PR manualmente
+### 5.6. Abrir o primeiro PR manualmente
 
 No original, abra **Pull requests > New pull request > compare across forks**. O aviso **Compare & pull request** no fork também pode iniciar a comparação.
 
@@ -257,11 +296,11 @@ Na descrição, informe a issue real, a mudança e o resultado observado ao exec
 
 Se toda a issue estiver resolvida, pode usar `Closes #NUMERO_REAL` na descrição, substituindo o marcador. O fechamento automático ocorre quando o PR é integrado à branch padrão. Para uma relação parcial, apenas referencie a issue.
 
-## 5. Ricardo: revisar e integrar o primeiro PR
+## 6. Revisar e integrar o primeiro pull request
 
-**No navegador:** abra o PR, leia a descrição e **Files changed**. Confira se a área foi preservada, se o perímetro está correto e se o amigo demonstrou a execução.
+**Mantenedor, no navegador:** abra o PR, leia a descrição e **Files changed**. Confira se a área foi preservada, se o perímetro está correto e se o contribuidor demonstrou a execução.
 
-Se houver ajuste necessário, comente no PR. O amigo corrige na mesma branch, executa o programa novamente e repete:
+Se houver ajuste necessário, comente no PR. O contribuidor corrige na mesma branch, executa o programa novamente e registra o ajuste com os comandos abaixo, somente se houver uma correção a enviar:
 
 ```bash
 git diff
@@ -273,9 +312,9 @@ git push origin feat/perimetro
 
 Os novos commits entram no mesmo PR. Não é necessário abrir outro para cada ajuste.
 
-**Ricardo, no navegador:** quando estiver correto, use **Merge pull request** e confirme a integração. Para esta aula, se disponível, escolha **Create a merge commit**, facilitando observar o histórico. Use apenas o método permitido pelo repositório.
+**Mantenedor, no navegador:** quando estiver correto, use **Merge pull request** e confirme a integração. Para esta aula, se disponível, escolha **Create a merge commit**, facilitando observar o histórico. Use apenas o método permitido pelo repositório.
 
-**Ricardo, no terminal, na cópia do original:** comece com estado limpo.
+**Mantenedor, no terminal, na cópia do original:** comece com estado limpo.
 
 ```bash
 git status --short
@@ -285,11 +324,11 @@ python quadrado_geom.py
 git log --oneline --graph --all -8
 ```
 
-Agora o original também deve devolver área e perímetro. Mostre a diferença entre a proposta aberta e a alteração efetivamente integrada.
+Agora o original também deve devolver área e perímetro. Enquanto o PR estava aberto, a mudança era uma proposta. Depois do merge, ela passa a fazer parte da branch padrão do original.
 
-## 6. Amigo: sincronizar o fork depois do merge
+## 7. Sincronizar o fork depois do merge
 
-O merge aconteceu no original. Antes da segunda tarefa, atualize sua base local e envie essa base ao seu fork. Comece com estado limpo:
+**Contribuidor, no terminal da cópia do fork.** O merge aconteceu no original. Antes da segunda tarefa, atualize sua base local e envie essa base ao seu fork. Comece com estado limpo:
 
 ```bash
 git status --short
@@ -302,9 +341,59 @@ python quadrado_geom.py
 
 Confirme área e perímetro também na `master` do fork. A contribuição com IA partirá dessa versão e usará **uma nova branch**, `feat/diagonal`.
 
-## 7. Amigo: segunda contribuição, com IA
+## 8. Registrar a segunda issue: diagonal, validação e testes
 
-### 7.1. Conectar o ambiente
+Com o perímetro integrado, o próximo pedido pode partir da versão atualizada do projeto. **Mantenedor:** abra uma nova issue no original usando o texto abaixo.
+
+**Título da issue:**
+
+```text
+Adicionar diagonal, validação do lado e testes automatizados
+```
+
+**Descrição da issue:**
+
+~~~markdown
+## Contexto
+
+A função quadrado_geom já retorna a área e o perímetro do quadrado.
+
+## Objetivo
+
+Adicionar a diagonal, definir que o lado deve ser positivo e verificar
+o comportamento da função com testes automatizados.
+
+## Comportamento esperado
+
+- Calcular diagonal = lado * sqrt(2), usando a biblioteca padrão.
+- Preservar as chaves area e perimetro e o retorno como dicionário.
+- Lançar ValueError para lado igual a zero ou negativo.
+- Preservar o bloco de execução de exemplo.
+
+Para lado = 5.0:
+area = 25.0, perimetro = 20.0, diagonal aproximadamente 7.0710678.
+
+## Critérios de aceite
+
+- [ ] As três medidas estão corretas para lados 5.0 e 2.0.
+- [ ] A comparação da diagonal nos testes usa tolerância numérica.
+- [ ] Zero e valores negativos geram ValueError.
+- [ ] test_quadrado_geom.py usa unittest, sem dependências externas.
+- [ ] python quadrado_geom.py executa o exemplo.
+- [ ] python -m unittest -v encontra testes e todos passam.
+- [ ] Apenas quadrado_geom.py e test_quadrado_geom.py são alterados/criados.
+
+## Forma de contribuição
+
+A implementação pode usar IA. O contribuidor deve revisar o código,
+conferir os resultados e descrever no PR o que foi realmente validado.
+~~~
+
+Publique a issue e copie seu número e link reais. Este será o pedido informado à IA na próxima seção. O objetivo da tarefa e seus critérios de aceite permanecem explícitos, mesmo quando a implementação é assistida por IA.
+
+## 9. Segunda contribuição: desenvolver com IA
+
+### 9.1. Conectar o ambiente
 
 Abra uma sessão capaz de ler o projeto, editar arquivos e executar Python. No ChatGPT Work, conecte o plugin GitHub e indique `@GitHub`; no Codex, selecione ou informe seu fork no ambiente de desenvolvimento. Confira o acesso ao fork, especialmente se ele foi criado depois da conexão.
 
@@ -312,7 +401,7 @@ Conseguir ler o GitHub não garante que a sessão consiga executar testes ou env
 
 O [guia do OpenStruct](https://www.openstruct.com.br/development/contribuir-com-ia) mostra o percurso de configuração. Nesta aula, use os endereços de **geometria-quadrado**, e não os aplicativos selecionáveis no formulário desse guia.
 
-### 7.2. Prompt para a segunda tarefa
+### 9.2. Prompt para a segunda tarefa
 
 Substitua `SEU-USUARIO` e `NUMERO_REAL_DA_ISSUE` antes de enviar. O fork precisa estar atualizado com o primeiro PR.
 
@@ -340,7 +429,7 @@ Confira as três medidas para lados 5.0 e 2.0, usando tolerância na
 diagonal, e teste a rejeição de zero e valores negativos.
 
 Não instale dependências. Altere apenas quadrado_geom.py e crie
-test_quadrado_geom.py. README.md é nosso roteiro: mantenha-o preservado.
+test_quadrado_geom.py. README.md contém as notas da aula: mantenha-o preservado.
 Execute python quadrado_geom.py e python -m unittest -v. Confira se
 testes foram realmente encontrados e relate resultados e limitações.
 
@@ -355,13 +444,13 @@ Se faltar alguma capacidade ou acesso, diga o que depende de mim.
 Não afirme ter executado ações que não realizou.
 ```
 
-Durante a execução, observe o plano, os arquivos alterados e as verificações. O ganho demonstrado é a IA trabalhar com o projeto e apresentar evidências que podemos conferir.
+A IA participa da implementação, mas o contribuidor continua responsável pela proposta. O plano, o diff e as saídas dos testes permitem conferir se a ferramenta realizou o pedido e respeitou seus limites. As etapas de issue, branch, commit, PR e revisão continuam valendo.
 
-## 8. Conferir a entrega da IA e abrir o segundo PR
+## 10. Conferir a entrega da IA e abrir o segundo PR
 
-### Amigo: trazer a branch do fork para seu computador
+### 10.1. Obter e verificar a branch da contribuição
 
-Se a IA trabalhou na nuvem e enviou a branch ao fork, na sua cópia local e com estado limpo:
+**Papel ativo: contribuidor.** Se a IA trabalhou na nuvem e enviou a branch ao fork, na sua cópia local e com estado limpo:
 
 ```bash
 git status --short
@@ -383,12 +472,12 @@ Título sugerido: **feat: adicionar diagonal, validação e testes**.
 
 Inclua a issue real, os dois arquivos alterados, os comandos realmente executados e suas saídas. Informe o apoio de IA e o que você conferiu.
 
-### Ricardo: revisar o segundo PR
+### 10.2. Revisar e integrar a segunda contribuição
 
-Confira a preservação de área/perímetro, a diagonal, o tratamento de entradas e os testes. Peça explicações ou ajustes quando necessário. O amigo continua na mesma branch para corrigir e enviar novos commits.
+**Papel ativo: mantenedor.** Confira a preservação de área/perímetro, a diagonal, o tratamento de entradas e os testes. Peça explicações ou ajustes quando necessário. O contribuidor continua na mesma branch para corrigir e enviar novos commits.
 
 <details>
-<summary>Opcional: Ricardo executar a branch do PR antes do merge</summary>
+<summary>Opcional: o mantenedor executar a branch do PR antes do merge</summary>
 
 Se estiver usando GitHub CLI, na cópia do original, com estado limpo, substitua `NUMERO_REAL_DO_PR`:
 
@@ -399,11 +488,11 @@ python -m unittest -v
 git switch master
 ```
 
-Isso obtém a branch do PR para conferência local. A decisão de merge continua no GitHub. O amigo permanece responsável pelos ajustes na contribuição.
+Isso obtém a branch do PR para conferência local. A decisão de merge continua no GitHub. O contribuidor permanece responsável pelos ajustes na contribuição.
 
 </details>
 
-Depois da revisão e do merge, **Ricardo**, na cópia do original:
+Depois da revisão e do merge, **o mantenedor**, na cópia do original:
 
 ```bash
 git status --short
@@ -414,9 +503,9 @@ python -m unittest -v
 git log --oneline --graph --all -10
 ```
 
-**Amigo:** repita a sincronização da seção 6 e rode também os testes. Agora as duas contas devem acompanhar a versão integrada.
+**Contribuidor:** repita a sincronização da seção 7 e rode também os testes. Agora as duas contas devem acompanhar a versão integrada.
 
-## 9. Fechamento e dúvidas rápidas
+## 11. Consolidar o processo e resolver dúvidas
 
 | Situação | O que conferir |
 |---|---|
@@ -429,7 +518,15 @@ git log --oneline --graph --all -10
 
 Depois de confirmar a integração, as branches das tarefas podem ser removidas se não forem mais necessárias. Essa limpeza é posterior ao merge e não é necessária para entender a aula.
 
-**Perguntas para concluir:** qual a diferença entre commit, push e PR? Por que atualizar o fork antes da próxima tarefa? O que mudou no processo quando usamos IA?
+O fluxo completo começa com uma issue e termina com a mudança revisada e integrada. O **commit** registra a alteração localmente, o **push** envia o histórico ao fork e o **PR** propõe sua integração no original. Atualizar o fork entre tarefas evita começar a próxima contribuição sobre uma versão desatualizada.
+
+### Aplicação nos projetos OpenStruct
+
+O mesmo processo pode ser usado para contribuir com os projetos do [OpenStruct](https://www.openstruct.com.br): escolher uma issue, entender o pedido, preparar uma alteração pequena e enviar um PR com evidências de validação. O código do quadrado torna o fluxo fácil de acompanhar; nos aplicativos de engenharia, a revisão também precisa considerar os critérios técnicos e os testes próprios de cada projeto.
+
+Uma issue pode registrar um defeito, uma melhoria, uma dúvida técnica ou uma investigação. Os critérios de aceite relacionam esse pedido ao resultado que será revisado. A IA pode ajudar a compreender o código e implementar a solução; a análise técnica e a decisão de integração continuam com as pessoas responsáveis pelo projeto.
+
+O uso de fork é comum para contribuições externas. Em equipes com permissão de escrita, também é possível trabalhar com branches no próprio repositório. Em ambos os casos, tarefas delimitadas, revisão e validação dão sustentação ao desenvolvimento com ou sem IA.
 
 ## Referências
 
@@ -442,4 +539,4 @@ Depois de confirmar a integração, as branches das tarefas podem ser removidas 
 - [Testes com unittest](https://docs.python.org/3/library/unittest.html)
 - [Contribuição com IA no OpenStruct](https://www.openstruct.com.br/development/contribuir-com-ia)
 
-Material didático preparado para a aula de Ricardo Corsini. Referências conferidas em 11/11/2026. Menus e disponibilidade das ferramentas podem variar.
+Notas de aula de Ricardo Corsini. Menus e disponibilidade das ferramentas podem variar conforme a versão e as permissões de cada ambiente.
