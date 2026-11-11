@@ -539,4 +539,4 @@ O uso de fork é comum para contribuições externas. Em equipes com permissão 
 - [Testes com unittest](https://docs.python.org/3/library/unittest.html)
 - [Contribuição com IA no OpenStruct](https://www.openstruct.com.br/development/contribuir-com-ia)
 
-Notas de aula de Ricardo Corsini. Menus e disponibilidade das ferramentas podem variar conforme a versão e as permissões de cada ambiente.
+Notas de aula de Ricardo Corsini. Menus e disponibilidade das ferramentas podem variar conforme a versão e as permissões de cada ambiente..
