@@ -1,8 +1,15 @@
+from math import sqrt
+
+
 def quadrado_geom(lado):
-    """Retorna a área e o perímetro de um quadrado."""
+    """Retorna a área, o perímetro e a diagonal de um quadrado de lado positivo."""
+    if lado <= 0:
+        raise ValueError("O lado deve ser positivo.")
+
     return {
         "area": lado ** 2,
         "perimetro": 4 * lado,
+        "diagonal": lado * sqrt(2),
     }
 
 if __name__ == "__main__":
